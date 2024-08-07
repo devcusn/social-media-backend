@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 
-import { PrismaService } from 'src/core/prisma/prisma.service';
+import { PrismaService } from 'src/_core/prisma/prisma.service';
 
 @Controller('auth')
 export class AuthController {
