@@ -1,20 +1,33 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 
 import { PrismaService } from 'src/_core/prisma/prisma.service';
 import { UserRegisterDto, UserLoginDto } from './models/dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
   async loginUser(data: UserLoginDto) {
-    const res = await this.prisma.user.findFirst({
+    const userRes = await this.prisma.user.findFirst({
       where: {
         email: data.email,
         password: data.password,
       },
+      select: {
+        id: true,
+        username: true,
+        email: true,
+      },
     });
-    if (res) {
-      return true;
+
+    if (userRes) {
+      return {
+        statusCode: HttpStatus.OK,
+        data: {
+          access_token: await this.jwtService.signAsync(userRes),
+        },
+        message: 'User can access',
+      };
     } else {
       throw new NotFoundException('User not found');
     }
