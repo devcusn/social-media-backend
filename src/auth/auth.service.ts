@@ -1,8 +1,9 @@
 import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 
+import { checkPassword, hashPassword } from 'src/utils/hash-passord';
 import { PrismaService } from 'src/_core/prisma/prisma.service';
 import { UserRegisterDto, UserLoginDto } from './models/dto';
-import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -11,34 +12,45 @@ export class AuthService {
     const userRes = await this.prisma.user.findFirst({
       where: {
         email: data.email,
-        password: data.password,
       },
       select: {
         id: true,
         username: true,
         email: true,
+        password: true,
       },
     });
 
     if (userRes) {
-      return {
-        statusCode: HttpStatus.OK,
-        data: {
-          access_token: await this.jwtService.signAsync(userRes),
-        },
-        message: 'User can access',
-      };
+      const { password, ...jwtData } = userRes;
+      const checkedPassword = await checkPassword(data.password, password);
+      if (checkedPassword) {
+        return {
+          statusCode: HttpStatus.OK,
+          data: {
+            access_token: await this.jwtService.signAsync(jwtData),
+          },
+          message: 'User can access',
+        };
+      } else {
+        return {
+          statusCode: HttpStatus.NOT_FOUND,
+          data: '',
+          message: 'Check the login information',
+        };
+      }
     } else {
       throw new NotFoundException('User not found');
     }
   }
   async createUser(data: UserRegisterDto) {
+    const hashedPassword = await hashPassword(data.password);
     try {
       await this.prisma.user.create({
         data: {
           email: data.email,
           username: data.username,
-          password: data.password,
+          password: hashedPassword,
           profile: {
             create: {},
           },

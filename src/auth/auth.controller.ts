@@ -1,15 +1,12 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Post, Put } from '@nestjs/common';
 
-import { PrismaService } from 'src/_core/prisma/prisma.service';
 import { UserLoginDto, UserRegisterDto } from './models/dto';
 import { AuthService } from './auth.service';
+import { hashPassword, checkPassword } from 'src/utils/hash-passord';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private prisma: PrismaService,
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
   @Post('/login')
   async login(@Body() data: UserLoginDto) {
     const res = await this.authService.loginUser(data);
@@ -19,6 +16,20 @@ export class AuthController {
   async register(@Body() data: UserRegisterDto) {
     const res = await this.authService.createUser(data);
     return res;
+  }
+  //test hash password
+  @Post('/hashPassword')
+  async hasPassword(@Body() data: UserRegisterDto) {
+    const hashedPassword = await hashPassword('hello');
+    return hashedPassword;
+  }
+  @Post('/checkPassword')
+  async checkPasword(@Body() data: UserRegisterDto) {
+    const hashedPassword = await checkPassword(
+      'hello',
+      '$2b$10$tbOgcFtHcjp1qHwTtmPiP.4vO60N6yt80tc1xpRORAyysanPJZvfq',
+    );
+    return hashedPassword;
   }
   @Put('/update/password')
   async updatePassword() {
