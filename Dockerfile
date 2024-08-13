@@ -13,7 +13,7 @@ RUN npx prisma generate
 
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 4001
 
 
 CMD ["sh", "-c", "npx prisma migrate dev && npm run start:prod"]
