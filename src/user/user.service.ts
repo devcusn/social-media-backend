@@ -111,4 +111,26 @@ export class UserService {
       throw new Error(err);
     }
   }
+  async deleteFriend(data: SendFriendRequestModel) {
+    try {
+      const deletedFriendRequest = await this.prisma.friendRequest.deleteMany({
+        where: {
+          OR: [
+            {
+              senderId: data.senderId,
+              receiverId: data.receiverId,
+            },
+            {
+              senderId: data.receiverId,
+              receiverId: data.senderId,
+            },
+          ],
+        },
+      });
+
+      return { status: true, deletedCount: deletedFriendRequest.count };
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
 }
