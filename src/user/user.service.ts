@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/_core/prisma/prisma.service';
 import { SendFriendRequestModel } from './models/dto';
+import { getRandomNumber } from 'src/utils/random';
 
 @Injectable()
 export class UserService {
@@ -133,4 +134,21 @@ export class UserService {
       throw new Error(err);
     }
   }
+  getUserProfile = (user: any) => {
+    try {
+      return {
+        data: {
+          username: user.username,
+          email: user.email,
+          following: getRandomNumber(100, 500),
+          followers: getRandomNumber(0, 200),
+          posts: getRandomNumber(0, 50),
+          name: 'enes şiirin',
+          bio: `Hello I am enes ${user.usernmae}`,
+        },
+      };
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }
