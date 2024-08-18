@@ -38,11 +38,7 @@ export class AuthService {
           message: 'User can access',
         };
       } else {
-        return {
-          statusCode: HttpStatus.NOT_FOUND,
-          data: '',
-          message: 'Check the login information',
-        };
+        throw new NotFoundException('Check the login information');
       }
     } else {
       throw new NotFoundException('User not found');
