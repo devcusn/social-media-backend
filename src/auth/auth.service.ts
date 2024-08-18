@@ -1,4 +1,9 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { checkPassword, hashPassword } from 'src/utils/hash-passord';
@@ -58,7 +63,7 @@ export class AuthService {
       });
       return { status: true };
     } catch (err) {
-      throw Error(err);
+      throw new ConflictException('User already exists!');
     }
   }
   async checkUser() {

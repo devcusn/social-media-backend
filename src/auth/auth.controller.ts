@@ -3,15 +3,18 @@ import { Body, Controller, Post, Put } from '@nestjs/common';
 import { UserLoginDto, UserRegisterDto } from './models/dto';
 import { AuthService } from './auth.service';
 import { hashPassword, checkPassword } from 'src/utils/hash-passord';
+import { Public } from 'src/_core/guards/auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+  @Public()
   @Post('/login')
   async login(@Body() data: UserLoginDto) {
     const res = await this.authService.loginUser(data);
     return res;
   }
+  @Public()
   @Post('/register')
   async register(@Body() data: UserRegisterDto) {
     const res = await this.authService.createUser(data);
