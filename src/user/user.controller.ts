@@ -39,4 +39,14 @@ export class UserController {
     const res = await this.userService.getUserProfile(user);
     return res;
   }
+  @Get('/current')
+  async getCurrentUser(@User() user) {
+    const { email, username } = user;
+    return {
+      data: {
+        email,
+        username,
+      },
+    };
+  }
 }
