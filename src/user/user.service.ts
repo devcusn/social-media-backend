@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/_core/prisma/prisma.service';
 import { SendFriendRequestModel } from './models/dto';
 import { getRandomNumber } from 'src/utils/random';
@@ -6,6 +6,14 @@ import { getRandomNumber } from 'src/utils/random';
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
+  async getAllUser() {
+    try {
+      const res = await this.prisma.user.findMany();
+      return res;
+    } catch (err) {
+      throw new NotFoundException('users not found');
+    }
+  }
   async sendFriendRequest(data: SendFriendRequestModel) {
     try {
       await this.prisma.friendRequest.create({

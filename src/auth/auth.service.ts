@@ -33,6 +33,7 @@ export class AuthService {
         return {
           statusCode: HttpStatus.OK,
           data: {
+            username: userRes.username,
             access_token: await this.jwtService.signAsync(jwtData),
           },
           message: 'User can access',

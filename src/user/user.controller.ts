@@ -2,10 +2,17 @@ import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { SendFriendRequestDto } from './models/dto';
 import { User } from 'src/_core/decorators/user.decorator';
+import { Public } from 'src/_core/guards/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
+  @Public()
+  @Get('/all')
+  async getAllUser() {
+    const res = await this.userService.getAllUser();
+    return res;
+  }
   @Post('/user/friends/request')
   async sendFridendRequest(@Body() data: SendFriendRequestDto) {
     const id = 10;
@@ -33,9 +40,9 @@ export class UserController {
     });
     return res;
   }
+
   @Get('/profile')
   async getUserProfile(@User() user) {
-    console.log(user);
     const res = await this.userService.getUserProfile(user);
     return res;
   }
