@@ -2,6 +2,8 @@ FROM node:18.18-alpine
 
 WORKDIR /app
 
+RUN mkdir uploads
+
 COPY package*.json ./
 
 RUN npm install --force
