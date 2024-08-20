@@ -23,6 +23,7 @@ export class PostController {
   @Get('all-posts')
   async gelAllPosts() {
     const res = await this.postService.getAllPosts();
+    console.log(res);
     return res;
   }
 
@@ -57,7 +58,7 @@ export class PostController {
       }));
       return {
         data: {
-          images: imageUrls,
+          images: imageUrls || [],
         },
       };
     } catch (err) {
