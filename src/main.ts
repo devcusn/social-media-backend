@@ -4,6 +4,6 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('v1');
-  await app.listen(4001, '192.168.1.4');
+  await app.listen(4001);
 }
 bootstrap();
