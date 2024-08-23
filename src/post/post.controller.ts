@@ -54,7 +54,7 @@ export class PostController {
       const files = readdirSync('./uploads');
       const imageUrls = files.map((file) => ({
         filename: file,
-        url: `http://192.168.1.4:4001/v1/posts/image/${file}`,
+        url: `http://209.250.224.79:4001/v1/posts/image/${file}`,
       }));
       return {
         data: {
