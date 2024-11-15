@@ -16,7 +16,6 @@ This project is a backend system for a social media application, built with **Ty
 - **TypeScript**: Ensures type safety and modern JavaScript features.
 - **NestJS**: Provides a robust framework for building scalable server-side applications.
 - **PostgreSQL**: Utilized as the primary database for storing application data.
-- **Redis**: Caching and session management for enhanced performance.
 
 ## Installation
 
